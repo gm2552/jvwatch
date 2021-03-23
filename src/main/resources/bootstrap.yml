@@ -1,0 +1,16 @@
+jvwatch:
+  states: MO,KS
+  radius: 25
+  latitude: '39.2662054'
+  longitude: '-94.46967649999999'
+  clinics:
+    hyvee:
+      apptLink: 'https://www.hy-vee.com/my-pharmacy/covid-vaccine-consent'
+      service:
+        url: 'https://www.hy-vee.com/my-pharmacy/api/graphql'
+    cvs:
+      cities: KANSAS CITY,LIBERTY,GLADSTONE
+      apptLink: 'https://www.cvs.com/immunizations/covid-19-vaccine'
+      service:
+        url: 'https://www.cvs.com/immunizations/covid-19-vaccine.vaccine-status.json?vaccineinfo'
+        lockoutUrl: 'https://www.cvs.com/vaccine/intake/store/cvd-schedule?icid=coronavirus-lp-vaccine-pa-statetool'
