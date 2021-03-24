@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -19,6 +21,8 @@ import abareaso.io.jvwatch.model.ClinicData;
 @Component
 public class CVSClinic implements Clinic
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(CVSClinic.class);	
+	
 	@Value("${jvwatch.states}")
 	protected List<String> states;
 	
@@ -41,10 +45,10 @@ public class CVSClinic implements Clinic
 	{
 		final ClinicAvailability retVal = new ClinicAvailability();
 		
-		final String json = cvsClient.getAppointments().block();
-		
 		try
 		{
+			final String json = cvsClient.getAppointments().block();
+			
 			final JSONObject stateObjects = new JSONObject(json).getJSONObject("responsePayloadData").getJSONObject("data");
 			
 			for (String state : states)
@@ -63,7 +67,8 @@ public class CVSClinic implements Clinic
 							{
 								if (siteLockedOut())
 								{
-									// Warning
+
+									LOGGER.info("Would have notified for CVS {}, {} but site is locked out", clinic.getString("city"), state);
 								}
 								else
 								{
@@ -76,20 +81,20 @@ public class CVSClinic implements Clinic
 							}
 							else
 							{
-								// warning
+								LOGGER.warn("Unknown location status from CVS: {}", clinic.getString("status"));
 							}
 						}
 					}
 				}
 				catch (Exception e)
 				{
-					
+					LOGGER.error("Error parsing clinic data from CVS state {} data: {}", state, e.getMessage(), e);
 				}
 			}
 		}
 		catch (Exception e)
 		{
-			// warning
+			LOGGER.error("Error retrieving clinic data from CVS : {}", e.getMessage(), e);
 		}
 		return retVal;
 	}

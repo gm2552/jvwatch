@@ -3,7 +3,7 @@ package abareaso.io.jvwatch.model;
 import lombok.Data;
 
 @Data
-public class HyVeeRequest 
+public class HyVeeApptRequest 
 {
 	private String operationName = "SearchPharmaciesNearPointWithCovidVaccineAvailability";
 	

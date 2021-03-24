@@ -1,6 +1,8 @@
 package abareaso.io.jvwatch.model;
 
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
@@ -20,4 +22,10 @@ public class ClinicData
 	private String name;
 	
 	private String link;
+	
+	private Date eariestApptDay;
+	
+	private Date latestApptDay;
+	
+	private Date lastFetched;
 }

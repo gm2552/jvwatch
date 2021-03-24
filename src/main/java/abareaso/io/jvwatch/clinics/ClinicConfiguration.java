@@ -1,20 +1,20 @@
-package abareaso.io.jvwatch;
+package abareaso.io.jvwatch.clinics;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import abareaso.io.jvwatch.clinics.CVSClinic;
-import abareaso.io.jvwatch.clinics.Clinic;
-import abareaso.io.jvwatch.clinics.HyVeeClinic;
-
 @Configuration
 public class ClinicConfiguration 
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClinicConfiguration.class);		
+	
 	@Value("${jvwatch.clinics.balls.enabled:true}")
 	protected boolean enableBalls;
 	
@@ -30,8 +30,8 @@ public class ClinicConfiguration
 	@Value("${jvwatch.clinics.wallgreens.enabled:true}")
 	protected boolean enableWallgreens;		
 	
-	@Value("${jvwatch.clinics.wallmart.enabled:true}")
-	protected boolean enableWallmart;	
+	@Value("${jvwatch.clinics.wllmart.enabled:true}")
+	protected boolean enableWalmart;	
 	
 	@Autowired
 	protected CVSClinic cvsClinic;
@@ -39,16 +39,41 @@ public class ClinicConfiguration
 	@Autowired
 	protected HyVeeClinic hyVeeClinic;
 	
-	@Bean()
+	@Autowired
+	protected WalmartClinic walmartClinic;	
+	
+	@Autowired
+	protected WalgreensClinic walgreensClinic;
+	
+	@Bean
 	public List<Clinic> enabledClinics()
 	{
 		final List<Clinic> clinics = new ArrayList<>();
 		
-		//if (enableCVS)
-		//	clinics.add(cvsClinic);	
+		if (enableCVS)
+			clinics.add(cvsClinic);	
 		
 		if (enableHyVee)
 			clinics.add(hyVeeClinic);	
+		
+		if (enableWalmart)
+			clinics.add(walmartClinic);
+		
+		if (enableWallgreens)
+			clinics.add(walgreensClinic);
+		
+		StringBuilder bld = new StringBuilder("Enabled clinic searchs:");
+		if (clinics.isEmpty())
+			bld.append("\n\tNONE");
+		else
+		{
+			for (Clinic clin : clinics)
+			{
+				bld.append("\n\t").append(clin.getClass().getSimpleName());
+			}
+		}
+		
+		LOGGER.info(bld.toString());
 		
 		return clinics;
 	}
