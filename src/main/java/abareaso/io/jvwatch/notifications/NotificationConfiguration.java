@@ -1,4 +1,4 @@
-package abareaso.io.jvwatch.clinics.notifications;
+package abareaso.io.jvwatch.notifications;
 
 import java.util.ArrayList;
 import java.util.List;

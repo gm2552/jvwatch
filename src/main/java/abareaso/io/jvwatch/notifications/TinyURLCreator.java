@@ -1,4 +1,4 @@
-package abareaso.io.jvwatch.clinics.notifications;
+package abareaso.io.jvwatch.notifications;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

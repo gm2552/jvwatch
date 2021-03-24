@@ -10,9 +10,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import abareaso.io.jvwatch.clinics.Clinic;
-import abareaso.io.jvwatch.clinics.notifications.NotificationsPublisher;
 import abareaso.io.jvwatch.model.ClinicAvailability;
 import abareaso.io.jvwatch.model.ClinicData;
+import abareaso.io.jvwatch.notifications.NotificationsPublisher;
 import abareaso.io.jvwatch.repository.ClinicDataRepository;
 @Component
 public class CheckForVaccineTask 

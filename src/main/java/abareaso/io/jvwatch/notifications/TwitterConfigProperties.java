@@ -1,4 +1,4 @@
-package abareaso.io.jvwatch.clinics.notifications;
+package abareaso.io.jvwatch.notifications;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

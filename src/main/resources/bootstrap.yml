@@ -7,6 +7,8 @@ jvwatch:
   radius: 25
   latitude: '40.0889187'
   longitude: '-93.6339103'
+  checkTask:
+    period: 120000
   clinics:
     hyvee:
       enabled: true

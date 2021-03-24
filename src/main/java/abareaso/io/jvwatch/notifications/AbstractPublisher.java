@@ -1,4 +1,4 @@
-package abareaso.io.jvwatch.clinics.notifications;
+package abareaso.io.jvwatch.notifications;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
