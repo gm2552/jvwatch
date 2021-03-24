@@ -19,12 +19,17 @@ public class WalgreensClinic extends VaccineSpotterClinic
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WalgreensClinic.class);	
 	
+	public WalgreensClinic(ClinicSearchProperties props)
+	{
+		super(props);
+	}
+	
 	@Override
 	protected ClinicData buildClinicData(VaccineSpotterResp.VaccineSpotterFeature feature, List<Date> dates)
 	{
 		final ClinicData data = new ClinicData();
 		
-		final StringBuilder id = new StringBuilder(cachePrefix).append("walgreens-").append(feature.getProperties().getId());
+		final StringBuilder id = new StringBuilder(props.getCachePrefix()).append("walgreens-").append(feature.getProperties().getId());
 		
 		data.setLink(feature.getProperties().getUrl());
 		data.setId(id.toString());
@@ -68,9 +73,9 @@ public class WalgreensClinic extends VaccineSpotterClinic
 			double locLat = feature.getGeometry().getCoordinates().get(1);
 			double locLong = feature.getGeometry().getCoordinates().get(0);
 			
-			double distance = distance(this.latitude, this.longitude, locLat, locLong);
+			double distance = distance(props.getLatitude(), props.getLongitude(), locLat, locLong);
 			
-			if (distance <= radius)
+			if (distance <= props.getRadius())
 				retVal = true;
 		}
 		

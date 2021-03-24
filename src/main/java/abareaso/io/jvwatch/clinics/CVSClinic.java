@@ -23,15 +23,11 @@ public class CVSClinic implements Clinic
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CVSClinic.class);	
 	
-	@Value("${jvwatch.states}")
-	protected List<String> states;
+	protected ClinicSearchProperties props;
 	
 	@Value("${jvwatch.clinics.cvs.cities}")
 	protected List<String> cities;	
 	
-	@Value("${jvwatch.cachePrefix:}")
-	protected String cachePrefix;	
-
 	@Value("${jvwatch.clinics.cvs.apptLink}")
 	protected String apptLink;	
 	
@@ -40,6 +36,11 @@ public class CVSClinic implements Clinic
 	
 	@Autowired
 	protected CVSClient cvsClient;
+	
+	public CVSClinic(ClinicSearchProperties props)
+	{
+		this.props = props;
+	}
 	
 	public ClinicAvailability getLocations()
 	{
@@ -51,7 +52,7 @@ public class CVSClinic implements Clinic
 			
 			final JSONObject stateObjects = new JSONObject(json).getJSONObject("responsePayloadData").getJSONObject("data");
 			
-			for (String state : states)
+			for (String state : props.getStates())
 			{
 				try
 				{
@@ -125,7 +126,7 @@ public class CVSClinic implements Clinic
 	{
 		final ClinicData data = new ClinicData();
 		
-		final StringBuilder id = new StringBuilder(cachePrefix).append("cvs-").append(clinic.getString("state")).append("-").append(clinic.getString("city"));
+		final StringBuilder id = new StringBuilder(props.getCachePrefix()).append("cvs-").append(clinic.getString("state")).append("-").append(clinic.getString("city"));
 		
 		data.setId(id.toString());
 		data.setName("CVS " + clinic.getString("city"));

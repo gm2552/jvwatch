@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import abareaso.io.jvwatch.feign.VaccineSpotterClient;
 import abareaso.io.jvwatch.model.ClinicAvailability;
@@ -23,30 +22,22 @@ public abstract class VaccineSpotterClinic implements Clinic
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HyVeeClinic.class);		
 	
-	@Value("${jvwatch.cachePrefix:}")
-	protected String cachePrefix;	
-	
-	@Value("${jvwatch.states}")
-	protected List<String> states;
-	
-	@Value("${jvwatch.radius}")
-	protected int radius;
-	
-	@Value("${jvwatch.latitude}")
-	protected double latitude;	
-	
-	@Value("${jvwatch.longitude}")
-	protected double longitude;	
+	protected ClinicSearchProperties props;
 	
 	@Autowired
 	protected VaccineSpotterClient vsClient;
+	
+	public VaccineSpotterClinic(ClinicSearchProperties props)
+	{
+		this.props = props;
+	}
 	
 	@Override
 	public ClinicAvailability getLocations() 
 	{
 		final ClinicAvailability retVal = new ClinicAvailability();
 		
-		for (String state : states)
+		for (String state : props.getStates())
 		{
 			try
 			{

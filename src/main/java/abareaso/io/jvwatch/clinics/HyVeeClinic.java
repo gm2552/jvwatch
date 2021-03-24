@@ -32,20 +32,15 @@ public class HyVeeClinic implements Clinic
 {	
 	private static final Logger LOGGER = LoggerFactory.getLogger(HyVeeClinic.class);	
 	
-	@Value("${jvwatch.radius}")
-	protected int radius;
-	
-	@Value("${jvwatch.latitude}")
-	protected double latitude;	
-	
-	@Value("${jvwatch.longitude}")
-	protected double longitude;	
-	
-	@Value("${jvwatch.cachePrefix:}")
-	protected String cachePrefix;		
+	protected ClinicSearchProperties props;
 	
 	@Value("${jvwatch.clinics.hyvee.apptLink}")
 	protected String apptLink;	
+	
+	public HyVeeClinic(ClinicSearchProperties props)
+	{
+		this.props = props;
+	}
 	
 	@Override
 	public ClinicAvailability getLocations() 
@@ -53,9 +48,9 @@ public class HyVeeClinic implements Clinic
 		final ClinicAvailability retVal = new ClinicAvailability();
 		
 		final HyVeeApptRequest.Variables vars = new HyVeeApptRequest.Variables();
-		vars.setLatitude(latitude);
-		vars.setLongitude(longitude);
-		vars.setRadius(radius);
+		vars.setLatitude(props.getLatitude());
+		vars.setLongitude(props.getLongitude());
+		vars.setRadius(props.getRadius());
 		
 		final HyVeeApptRequest req = new HyVeeApptRequest();
 		req.setVariables(vars);
@@ -228,7 +223,7 @@ public class HyVeeClinic implements Clinic
 	{
 		final ClinicData data = new ClinicData();
 		
-		final StringBuilder id = new StringBuilder(cachePrefix).append("hyvee-").append(clinic.getString("locationId"));
+		final StringBuilder id = new StringBuilder(props.getCachePrefix()).append("hyvee-").append(clinic.getString("locationId"));
 		
 		data.setId(id.toString());
 		data.setName("Hy-Vee " + clinic.getString("name"));

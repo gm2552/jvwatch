@@ -15,35 +15,43 @@ public class TwitterConfigProperties
 	
 	private String accessTokenSecret;
 
-	public String getConsumerKey() {
+	public String getConsumerKey() 
+	{
 		return consumerKey;
 	}
 
-	public void setConsumerKey(String consumerKey) {
+	public void setConsumerKey(String consumerKey) 
+	{
 		this.consumerKey = consumerKey;
 	}
 
-	public String getConsumerSecret() {
+	public String getConsumerSecret() 
+	{
 		return consumerSecret;
 	}
 
-	public void setConsumerSecret(String consumerSecret) {
+	public void setConsumerSecret(String consumerSecret) 
+	{
 		this.consumerSecret = consumerSecret;
 	}
 
-	public String getAccessToken() {
+	public String getAccessToken() 
+	{
 		return accessToken;
 	}
 
-	public void setAccessToken(String accessToken) {
+	public void setAccessToken(String accessToken) 
+	{
 		this.accessToken = accessToken;
 	}
 
-	public String getAccessTokenSecret() {
+	public String getAccessTokenSecret() 
+	{
 		return accessTokenSecret;
 	}
 
-	public void setAccessTokenSecret(String accessTokenSecret) {
+	public void setAccessTokenSecret(String accessTokenSecret) 
+	{
 		this.accessTokenSecret = accessTokenSecret;
 	}
 	
