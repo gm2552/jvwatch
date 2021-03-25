@@ -13,7 +13,7 @@ and publishes to live production destination.
 
 The following is an example Twitter feed publishing vaccine appointments.
 
-![Twitter](./assets/twitter.png) 
+<img src="assets/twitter.png" width=420 height=400>
 
 ## Setup
 
