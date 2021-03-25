@@ -13,18 +13,17 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.util.StringUtils;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import abareaso.io.jvwatch.model.ClinicData;
 import abareaso.io.jvwatch.model.HyVeeApptRequest;
 import abareaso.io.jvwatch.model.HyVeeManufacturerIdRequest;
 import abareaso.io.jvwatch.model.HyVeeTimeSlotRequest;
+import reactor.core.publisher.Mono;
 
 /**
  * Retrieves vaccine appointment data from HyVee clinics.  This implementation uses the global 
@@ -59,19 +58,24 @@ public class HyVeeClinic implements Clinic
 		
 		final HyVeeApptRequest req = new HyVeeApptRequest();
 		req.setVariables(vars);
-		final RestTemplate template = new RestTemplate();
 		
 		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		final HttpEntity<HyVeeApptRequest> entity = new HttpEntity<>(req, headers);
+        headers.setAccept(Collections.singletonList(MediaType.ALL));
 		
 		try
-		{
-			final ResponseEntity<String> resp = template.exchange("https://www.hy-vee.com/my-pharmacy/api/graphql", HttpMethod.POST, entity, String.class);
-			if (resp.getStatusCodeValue() == 200)
+		{			
+			final WebClient webClient = WebClient.create("https://www.hy-vee.com/my-pharmacy/api/graphql");
+			 
+			final String jsonResp = webClient.post()
+			        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			        .body(Mono.just(req), HyVeeApptRequest.class)
+			        .retrieve()
+			        .bodyToMono(String.class).block();
+			
+			if (StringUtils.hasText(jsonResp))
 			{
-				final JSONArray stateObjects = new JSONObject(resp.getBody()).getJSONObject("data").getJSONArray("searchPharmaciesNearPoint");
+				final JSONArray stateObjects = new JSONObject(jsonResp).getJSONObject("data").getJSONArray("searchPharmaciesNearPoint");
 				
 				for (Object ob : stateObjects)
 				{
@@ -154,18 +158,21 @@ public class HyVeeClinic implements Clinic
 		
 		final HyVeeManufacturerIdRequest req = new HyVeeManufacturerIdRequest();
 		req.setVariables(vars);
-		final RestTemplate template = new RestTemplate();
 		
 		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		final HttpEntity<HyVeeManufacturerIdRequest> entity = new HttpEntity<>(req, headers);
 		
 		try
 		{
-			final ResponseEntity<String> resp = template.exchange("https://www.hy-vee.com/my-pharmacy/api/graphql", HttpMethod.POST, entity, String.class);
+			final WebClient webClient = WebClient.create("https://www.hy-vee.com/my-pharmacy/api/graphql");
+			 
+			final String jsonResp = webClient.post()
+			        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			        .body(Mono.just(req), HyVeeManufacturerIdRequest.class)
+			        .retrieve()
+			        .bodyToMono(String.class).block();			
 			
-			final JSONArray availObjects = new JSONObject(resp.getBody()).getJSONObject("data").getJSONArray("getCovidVaccineLocationAvailability");
+			final JSONArray availObjects = new JSONObject(jsonResp).getJSONObject("data").getJSONArray("getCovidVaccineLocationAvailability");
 			
 			for (Object ob : availObjects)
 			{
@@ -195,20 +202,23 @@ public class HyVeeClinic implements Clinic
 		
 		final HyVeeTimeSlotRequest req = new HyVeeTimeSlotRequest();
 		req.setVariables(vars);
-		final RestTemplate template = new RestTemplate();
 		
 		final HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		final HttpEntity<HyVeeTimeSlotRequest> entity = new HttpEntity<>(req, headers);
 		
 		try
 		{
-			final ResponseEntity<String> resp = template.exchange("https://www.hy-vee.com/my-pharmacy/api/graphql", HttpMethod.POST, entity, String.class);
+			final WebClient webClient = WebClient.create("https://www.hy-vee.com/my-pharmacy/api/graphql");
+			 
+			final String jsonResp = webClient.post()
+			        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			        .body(Mono.just(req), HyVeeTimeSlotRequest.class)
+			        .retrieve()
+			        .bodyToMono(String.class).block();				
 			
-			if (resp.getStatusCodeValue() == 200)
+			if (StringUtils.hasText(jsonResp))
 			{
-				final JSONArray availTimes = new JSONObject(resp.getBody()).getJSONObject("data").getJSONArray("getCovidVaccineTimeSlots");
+				final JSONArray availTimes = new JSONObject(jsonResp).getJSONObject("data").getJSONArray("getCovidVaccineTimeSlots");
 
 				for (Object time : availTimes)
 				{

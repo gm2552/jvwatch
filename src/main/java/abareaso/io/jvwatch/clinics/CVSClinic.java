@@ -9,11 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import abareaso.io.jvwatch.feign.CVSClient;
 import abareaso.io.jvwatch.model.ClinicData;
@@ -114,17 +114,17 @@ public class CVSClinic implements Clinic
 	{
 		try
 		{
-			final  RestTemplate templ = new RestTemplate();
+			final WebClient webClient = WebClient.create(lockoutUrl);
+			 
+			final String jsonResp = webClient.post()
+			        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+			        .retrieve()
+			        .bodyToMono(String.class).block();
 			
-			final ResponseEntity<String> ent = templ.exchange(lockoutUrl, HttpMethod.GET, null, String.class);
-			
-			if (ent.getStatusCodeValue() != 200)
+			if (StringUtils.hasText(jsonResp))
 				return false;
 			
-			if (StringUtils.hasText(ent.getBody()))
-				return false;
-			
-			return (ent.getBody().contains("Please check back later"));
+			return (jsonResp.contains("Please check back later"));
 		}
 		catch (Exception e)
 		{
