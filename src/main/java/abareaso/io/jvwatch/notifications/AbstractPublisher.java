@@ -2,6 +2,7 @@ package abareaso.io.jvwatch.notifications;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.util.StringUtils;
 
@@ -42,12 +43,12 @@ public abstract class AbstractPublisher implements Publisher
 		builder.append(".  Sign up here").append(zipCode).append(":\n");
 		builder.append(link);
 		
-		if (data.getLastFetched() != null)
-		{
-			final DateFormat dateFormat = new SimpleDateFormat("hh:mm aa");
-			
-			builder.append(" (as of ").append(dateFormat.format(data.getLastFetched())).append(")");
-		}
+		if (data.getLastFetched() == null)
+			data.setLastFetched(new Date());
+
+		final DateFormat dateFormat = new SimpleDateFormat("hh:mm aa");
+		
+		builder.append(" (as of ").append(dateFormat.format(data.getLastFetched())).append(")");
 		
 		return builder.toString();
 	}
@@ -57,12 +58,12 @@ public abstract class AbstractPublisher implements Publisher
 		
 		final StringBuilder builder = new StringBuilder("Vaccine appointments no longer available at ").append(data.getName());
 		
-		if (data.getLastFetched() != null)
-		{
-			final DateFormat dateFormat = new SimpleDateFormat("hh:mm aa");
-			
-			builder.append(" (as of ").append(dateFormat.format(data.getLastFetched())).append(")");
-		}
+		if (data.getLastFetched() == null)
+			data.setLastFetched(new Date());
+
+		final DateFormat dateFormat = new SimpleDateFormat("hh:mm aa");
+		
+		builder.append(" (as of ").append(dateFormat.format(data.getLastFetched())).append(")");
 		
 		return builder.toString();
 	}
