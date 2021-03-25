@@ -1,5 +1,5 @@
 # jvwatch
-SpringBoot port of @pcarn [vaccine-watch](https://github.com/pcarn/vaccine-watch). 
+SpringBoot port of @pcarn [vaccine-watch](https://github.com/pcarn/vaccine-watch). Thanks @pcarn for the great initial python project.
 
 Although this bot app duplicates much of the functionality in the python based vaccine-watch, it is not 
 the purpose of this app to create yet another bot as the original vaccine-watch already fills in that value 
