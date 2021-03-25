@@ -2,6 +2,11 @@ package abareaso.io.jvwatch.model;
 
 import lombok.Data;
 
+/**
+ * Request data model for requesting appointment time slots from a HyVee clinic.
+ * @author Greg Meyer
+ *
+ */
 @Data
 public class HyVeeTimeSlotRequest 
 {

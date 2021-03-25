@@ -14,10 +14,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import abareaso.io.jvwatch.feign.VaccineSpotterClient;
-import abareaso.io.jvwatch.model.ClinicAvailability;
 import abareaso.io.jvwatch.model.ClinicData;
 import abareaso.io.jvwatch.model.VaccineSpotterResp;
 
+/**
+ * An abstract base class that uses the VaccineSpotter API which has the ability retrieve appointment data
+ * for multiple clinic "brands".  Sub-classes should be created to filter the result set by the specific
+ * clinic brand.  It retrieves vaccine appointment data from HyVee clinics.  This implementation uses the global 
+ * jvwatch.states, jvwatch.radius, jvwatch.latitude, and jvwatch.longitude properties to control what general locations
+ * are queried for appointment data.
+ * @author Greg Meyer
+ */
 public abstract class VaccineSpotterClinic implements Clinic
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HyVeeClinic.class);		
@@ -33,9 +40,9 @@ public abstract class VaccineSpotterClinic implements Clinic
 	}
 	
 	@Override
-	public ClinicAvailability getLocations() 
+	public List<ClinicData> getClinicAppointements()
 	{
-		final ClinicAvailability retVal = new ClinicAvailability();
+		final List<ClinicData> retVal = new LinkedList<>();
 		
 		for (String state : props.getStates())
 		{
@@ -53,11 +60,11 @@ public abstract class VaccineSpotterClinic implements Clinic
 					
 						final List<Date> dates = getAptInfo(feature.getProperties());
 						
-						retVal.getAvailable().add(buildClinicData(feature, dates));
+						retVal.add(buildClinicData(feature, dates, true));
 					}
 					else
 					{
-						retVal.getUnavailable().add(buildClinicData(feature, Collections.emptyList()));
+						retVal.add(buildClinicData(feature, Collections.emptyList(), false));
 					}
 				}
 			}
@@ -133,7 +140,24 @@ public abstract class VaccineSpotterClinic implements Clinic
 		}
 	}
 	
+	/**
+	 * Indicates whether or not the clinic should be included in the result set.  This method should filter by 
+	 * clinic brand name and the location should be within the radius of the global latitude and longitude configuration
+	 * settings. 
+	 * @param feature The clinic that is being filtered.
+	 * @return Returns true if the clinic brand matches the desired brand and if the clinic location is within the desired location radius.
+	 * Return false other wise.
+	 */
 	protected abstract boolean shouldIncludeLocation(VaccineSpotterResp.VaccineSpotterFeature feature);
 	
-	protected abstract ClinicData buildClinicData(VaccineSpotterResp.VaccineSpotterFeature feature, List<Date> dates);
+	/**
+	 * Builds a ClinicData structure from the provided clinic.
+	 * @param feature The clinic that has been queried.
+	 * @param dates The first available appointment date and last appointment date (if available).  The first entry
+	 * in the list will be the first available appointment and the second entry will be the last available appointment. 
+	 * If the first date and the last date are the same, this list will only contain the first appointment date (i.e. a list of size 1).  
+	 * @param available Indicates if vaccine appointments are available at the clinic.
+	 * @return
+	 */
+	protected abstract ClinicData buildClinicData(VaccineSpotterResp.VaccineSpotterFeature feature, List<Date> dates, boolean available);
 }

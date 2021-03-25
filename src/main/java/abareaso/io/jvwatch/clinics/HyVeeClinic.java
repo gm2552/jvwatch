@@ -18,16 +18,21 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import abareaso.io.jvwatch.model.ClinicAvailability;
 import abareaso.io.jvwatch.model.ClinicData;
 import abareaso.io.jvwatch.model.HyVeeApptRequest;
 import abareaso.io.jvwatch.model.HyVeeManufacturerIdRequest;
 import abareaso.io.jvwatch.model.HyVeeTimeSlotRequest;
 
-@Component
+/**
+ * Retrieves vaccine appointment data from HyVee clinics.  This implementation uses the global 
+ * jvwatch.radius, jvwatch.latitude, and jvwatch.longitude properties to control what general locations
+ * are queried for appointment data.
+ * @author Greg Meyer
+ */
+@Service
 public class HyVeeClinic implements Clinic
 {	
 	private static final Logger LOGGER = LoggerFactory.getLogger(HyVeeClinic.class);	
@@ -43,9 +48,9 @@ public class HyVeeClinic implements Clinic
 	}
 	
 	@Override
-	public ClinicAvailability getLocations() 
+	public List<ClinicData> getClinicAppointements()
 	{
-		final ClinicAvailability retVal = new ClinicAvailability();
+		final List<ClinicData> retVal = new LinkedList<>();
 		
 		final HyVeeApptRequest.Variables vars = new HyVeeApptRequest.Variables();
 		vars.setLatitude(props.getLatitude());
@@ -76,11 +81,11 @@ public class HyVeeClinic implements Clinic
 					{
 						final List<Date> dates = getAptInfo(clinic.getString("locationId"));
 						
-						retVal.getAvailable().add(buildClinicData(clinic, dates));
+						retVal.add(buildClinicData(clinic, dates, true));
 					}
 					else
 					{
-						retVal.getUnavailable().add(buildClinicData(clinic, Collections.emptyList()));
+						retVal.add(buildClinicData(clinic, Collections.emptyList(), false));
 					}
 				}
 			}
@@ -219,7 +224,7 @@ public class HyVeeClinic implements Clinic
 		return retVal;
 	}
 	
-	protected ClinicData buildClinicData(JSONObject clinic, List<Date> dates)
+	protected ClinicData buildClinicData(JSONObject clinic, List<Date> dates, boolean available)
 	{
 		final ClinicData data = new ClinicData();
 		
@@ -238,6 +243,8 @@ public class HyVeeClinic implements Clinic
 			if (dates.size() > 1)
 				data.setLatestApptDay(dates.get(1));
 		}
+		
+		data.setAvailable(available);
 		
 		return data;
 	}

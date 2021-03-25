@@ -7,6 +7,12 @@ import org.springframework.util.StringUtils;
 
 import abareaso.io.jvwatch.model.ClinicData;
 
+/**
+ * Abstract base class for publisher.  This class creates generic logic for create available and
+ * unavailable messages.
+ * @author Greg Meyer
+ *
+ */
 public abstract class AbstractPublisher implements Publisher
 {
 	protected String buildAvailableMessage(ClinicData data)

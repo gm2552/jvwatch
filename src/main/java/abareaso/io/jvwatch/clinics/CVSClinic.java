@@ -1,5 +1,6 @@
 package abareaso.io.jvwatch.clinics;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -10,15 +11,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import abareaso.io.jvwatch.feign.CVSClient;
-import abareaso.io.jvwatch.model.ClinicAvailability;
 import abareaso.io.jvwatch.model.ClinicData;
 
-@Component
+/**
+ * Retrieves vaccine appointment data from CVS clinics.  This implementation uses the global 
+ * jvwatch.states property to control what states are queried for appointment data.  It also
+ * uses an additional city filter (jvwatch.clinics.cvs.cities) to further control the list of 
+ * appointment data.  The city filter is inclusive only, so all cities that are desired MUST 
+ * be included in the city list (they also should be in all upper case).
+ * @author Greg Meyer
+ *
+ */
+@Service
 public class CVSClinic implements Clinic
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CVSClinic.class);	
@@ -42,9 +51,9 @@ public class CVSClinic implements Clinic
 		this.props = props;
 	}
 	
-	public ClinicAvailability getLocations()
+	public List<ClinicData> getClinicAppointements()
 	{
-		final ClinicAvailability retVal = new ClinicAvailability();
+		final List<ClinicData> retVal = new LinkedList<>();
 		
 		try
 		{
@@ -73,12 +82,13 @@ public class CVSClinic implements Clinic
 								}
 								else
 								{
-									retVal.getAvailable().add(buildClinicData(clinic));
+									
+									retVal.add(buildClinicData(clinic, true));
 								}
 							}
 							else if (clinic.getString("status").equalsIgnoreCase("Fully Booked"))
 							{
-								retVal.getUnavailable().add(buildClinicData(clinic));
+								retVal.add(buildClinicData(clinic, false));
 							}
 							else
 							{
@@ -122,7 +132,7 @@ public class CVSClinic implements Clinic
 		}
 	}
 	
-	protected ClinicData buildClinicData(JSONObject clinic)
+	protected ClinicData buildClinicData(JSONObject clinic, boolean available)
 	{
 		final ClinicData data = new ClinicData();
 		
@@ -132,6 +142,7 @@ public class CVSClinic implements Clinic
 		data.setName("CVS " + clinic.getString("city"));
 		data.setState(clinic.getString("state"));
 		data.setLink(apptLink);
+		data.setAvailable(available);
 		
 		return data;
 	}

@@ -14,6 +14,11 @@ import abareaso.io.jvwatch.model.ClinicData;
 import abareaso.io.jvwatch.model.VaccineSpotterResp;
 import abareaso.io.jvwatch.model.VaccineSpotterResp.VaccineSpotterFeature;
 
+/**
+ * Retrieves vaccine appointment data from Walgreens clinics.  This is a subclass of the VaccineSpotterClinic and
+ * uses its filtering rules for appointement data.
+ * @author Greg Meyer
+ */
 @Component
 public class WalgreensClinic extends VaccineSpotterClinic
 {
@@ -25,7 +30,7 @@ public class WalgreensClinic extends VaccineSpotterClinic
 	}
 	
 	@Override
-	protected ClinicData buildClinicData(VaccineSpotterResp.VaccineSpotterFeature feature, List<Date> dates)
+	protected ClinicData buildClinicData(VaccineSpotterResp.VaccineSpotterFeature feature, List<Date> dates, boolean available)
 	{
 		final ClinicData data = new ClinicData();
 		
@@ -59,6 +64,8 @@ public class WalgreensClinic extends VaccineSpotterClinic
 				LOGGER.error("Error parsing walgreens date data : {}", e.getMessage(), e);
 			}
 		}
+		
+		data.setAvailable(available);
 		
 		return data;
 	}	

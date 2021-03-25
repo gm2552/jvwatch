@@ -13,19 +13,14 @@ public class NotificationsPublisher
 		this.publishers = publishers;
 	}
 	
-	public void publishAvailableNotification(ClinicData data)
+	public void publishNotification(ClinicData data)
 	{
 		for (Publisher publisher : publishers)
 		{
-			publisher.publishAvailableNotification(data);
+			if (data.isAvailable())
+				publisher.publishAvailableNotification(data);
+			else
+				publisher.publishUnavailableNotification(data);
 		}
 	}
-	
-	public void publishUnavailableNotification(ClinicData data)
-	{
-		for (Publisher publisher : publishers)
-		{
-			publisher.publishUnavailableNotification(data);
-		}
-	}	
 }

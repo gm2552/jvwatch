@@ -5,6 +5,11 @@ import org.slf4j.LoggerFactory;
 
 import abareaso.io.jvwatch.model.ClinicData;
 
+/**
+ * A publisher that dumps clinic notification messages to the configured logger.
+ * @author Greg Meyer
+ *
+ */
 public class LoggerPublisher extends AbstractPublisher
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoggerPublisher.class);	
@@ -23,7 +28,7 @@ public class LoggerPublisher extends AbstractPublisher
 	@Override
 	public void publishUnavailableNotification(ClinicData data) 
 	{
-		LOGGER.info("Publishing Unavailable Message:\n\t{}", buildAvailableMessage(data));
+		LOGGER.info("Publishing Unavailable Message:\n\t{}", buildUnavailableMessage(data));
 	}
 
 }

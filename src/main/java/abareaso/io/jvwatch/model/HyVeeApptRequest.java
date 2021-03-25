@@ -2,6 +2,11 @@ package abareaso.io.jvwatch.model;
 
 import lombok.Data;
 
+/**
+ * Request data model for requesting location information from HyVee clinics.
+ * @author Greg Meyer
+ *
+ */
 @Data
 public class HyVeeApptRequest 
 {

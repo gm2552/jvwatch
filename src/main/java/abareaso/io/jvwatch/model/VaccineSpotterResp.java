@@ -6,6 +6,11 @@ import java.util.List;
 
 import lombok.Data;
 
+/**
+ * Reply data model for requesting appointment information from clinics supported by the VaccineSpotter API.
+ * @author Greg Meyer
+ *
+ */
 @Data
 public class VaccineSpotterResp 
 {

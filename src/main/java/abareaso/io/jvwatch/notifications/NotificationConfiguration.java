@@ -15,6 +15,12 @@ import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
+/**
+ * Configuration class for creating instances of the publishers that will ultimately post
+ * clinic notifications to their final destinations. 
+ * @author Greg Meyer
+ *
+ */
 @Configuration
 public class NotificationConfiguration 
 {
@@ -26,6 +32,14 @@ public class NotificationConfiguration
 	@Autowired(required=false)
 	protected Twitter twitter;
 	
+	/**
+	 * Creates a twitter API instance for posting notifications to twitter.  The configuration setting
+	 * jvwatch.notifications.twitter.enabled must be set to 'true' for the twitter publisher to be used.
+	 * Additional configuration is required to set the twitter API keys and secrets.
+	 * @param props Contains the twitter API keys and secrets.  The are contained in the 
+	 * jvwatch.notifications.twitter.oauth.* settings.
+	 * @return An instance of the Twitter API class.
+	 */
 	@ConditionalOnProperty(name="jvwatch.notifications.twitter.enabled", havingValue="true")
 	@Bean
 	public Twitter twitter(TwitterConfigProperties props)
@@ -42,6 +56,10 @@ public class NotificationConfiguration
 		return tf.getInstance();
 	}
 	
+	/**
+	 * Creates a bean that contains a list of "enabled" publishers.
+	 * @return A list of configured publisher instances that will publish vaccine appointment data. 
+	 */
 	@Bean
 	public NotificationsPublisher notificationsPublisher()
 	{

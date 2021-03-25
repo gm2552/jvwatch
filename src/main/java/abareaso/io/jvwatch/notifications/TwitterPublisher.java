@@ -6,6 +6,12 @@ import org.slf4j.LoggerFactory;
 import abareaso.io.jvwatch.model.ClinicData;
 import twitter4j.Twitter;
 
+/**
+ * A Twitter publisher.  This publisher tweets clinic availability information
+ * to a specific twitter account.
+ * @author Greg Meyer
+ *
+ */
 public class TwitterPublisher extends AbstractPublisher
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TwitterPublisher.class);		

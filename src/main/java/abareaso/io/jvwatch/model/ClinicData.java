@@ -8,6 +8,12 @@ import org.springframework.data.redis.core.RedisHash;
 
 import lombok.Data;
 
+/**
+ * Data model for a clinic's appointment availability.  It is also
+ * stored in Redis to maintain the clinic's appointment publish state.
+ * @author Greg
+ *
+ */
 @RedisHash("jvwatch")
 @Data
 public class ClinicData 
@@ -28,4 +34,6 @@ public class ClinicData
 	private Date latestApptDay;
 	
 	private Date lastFetched;
+	
+	private boolean available;
 }

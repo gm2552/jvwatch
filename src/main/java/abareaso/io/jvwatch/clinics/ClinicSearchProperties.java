@@ -5,6 +5,13 @@ import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration properties for clinic search parameters.  These are global 
+ * parameters applied to many of the clinic implementations.  Other clinic
+ * implementations may require implementation specific configuration information.
+ * @author Greg Meyer
+ *
+ */
 @Configuration
 @ConfigurationProperties(prefix = "jvwatch") 
 public class ClinicSearchProperties 
@@ -59,6 +66,12 @@ public class ClinicSearchProperties
 		this.radius = radius;
 	}
 
+	/**
+	 * Gets the cache prefix to be pre-appended to the cache key.  This is useful
+	 * when running multiple instances of this application (as a data source) against the same cache
+	 * instance (ex: a single instance of Redis used by multiple application instances).
+	 * @return The cache prefix name.  Defaults to "" which if fine when only running a single instance of this application.
+	 */
 	public String getCachePrefix() 
 	{
 		return cachePrefix;

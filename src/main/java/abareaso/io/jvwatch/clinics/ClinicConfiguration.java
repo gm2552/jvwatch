@@ -10,6 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration class for creating instances of the clinics that will be polled for vaccine
+ * appointment data. 
+ * @author Greg Meyer
+ *
+ */
 @Configuration
 public class ClinicConfiguration 
 {
@@ -45,6 +51,10 @@ public class ClinicConfiguration
 	@Autowired
 	protected WalgreensClinic walgreensClinic;
 	
+	/**
+	 * Creates a bean that contains a list of "enabled" clinics.
+	 * @return A list of configured clinic instances that will be polled for vaccine appointment data. 
+	 */
 	@Bean
 	public List<Clinic> enabledClinics()
 	{
@@ -62,7 +72,7 @@ public class ClinicConfiguration
 		if (enableWallgreens)
 			clinics.add(walgreensClinic);
 		
-		StringBuilder bld = new StringBuilder("Enabled clinic searchs:");
+		final StringBuilder bld = new StringBuilder("Enabled clinic searchs:");
 		if (clinics.isEmpty())
 			bld.append("\n\tNONE");
 		else
