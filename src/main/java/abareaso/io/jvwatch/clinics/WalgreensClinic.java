@@ -52,16 +52,35 @@ public class WalgreensClinic extends VaccineSpotterClinic
 		
 		if (StringUtils.hasText(feature.getProperties().getAppointments_last_fetched()))
 		{
-			DateTimeFormatter parser = ISODateTimeFormat.dateTime();
-			
+			Date dt = null;
 			try
 			{
-				final Date dt = parser.parseDateTime(feature.getProperties().getAppointments_last_fetched()).toDate();
-				data.setLastFetched(dt);
+				DateTimeFormatter parser = ISODateTimeFormat.dateTime();
+				dt = parser.parseDateTime(feature.getProperties().getAppointments_last_fetched()).toDate();
+				
 			}
 			catch (Exception e)
 			{
-				LOGGER.error("Error parsing walgreens date data : {}", e.getMessage(), e);
+
+			}
+			
+			if (dt == null)
+			{
+				try
+				{
+					DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
+					dt = parser.parseDateTime(feature.getProperties().getAppointments_last_fetched()).toDate();
+					
+				}
+				catch (Exception e)
+				{
+					LOGGER.error("Error parsing Walgreens date data : {}", e.getMessage(), e);
+				}				
+			}
+			
+			if (dt != null)
+			{
+				data.setLastFetched(dt);
 			}
 		}
 		
