@@ -21,6 +21,16 @@ import abareaso.io.jvwatch.feign.PublixClient;
 import abareaso.io.jvwatch.model.ClinicData;
 import abareaso.io.jvwatch.model.PublixStoresResp;
 
+/**
+ * Retrieves vaccine appointment data from Publix clinics.  This implementation uses the global 
+ * jvwatch.states property to control what states are queried for appointment data as well
+ * as the global longitude and latitude configuratoin settings.  It also
+ * uses an additional city filter (jvwatch.clinics.publix.cities) to further control the list of 
+ * appointment data.  The city filter is inclusive only, so all cities that are desired MUST 
+ * be included in the city list.
+ * @author Greg Meyer
+ *
+ */
 @Service
 public class PublixClinic implements Clinic
 {
@@ -106,6 +116,11 @@ public class PublixClinic implements Clinic
 		return retVal;
 	}
 	
+	/**
+	 * There is not really a JSON API for getting appointments, so this uses
+	 * an HTML scraping technique to get a list of the clinic names offering appointments.
+	 * @return A list of the clinic names offering appointments.
+	 */
 	public List<String> getApptClinics()
 	{
 		final List<String> apptClinicNames = new LinkedList<>();

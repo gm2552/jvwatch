@@ -38,6 +38,11 @@ jvwatch:
   notifications:
     logger:
        enabled: true
+    email:
+       enabled: false
+       from:
+       recips: 
+       subject: 
     twitter:
       enabled: false
       oauth:
@@ -45,3 +50,4 @@ jvwatch:
         consumerSecret: 
         accessToken: 
         accessTokenSecret: 
+

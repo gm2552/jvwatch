@@ -7,6 +7,11 @@ import abareaso.io.jvwatch.model.PublixStoresResp;
 import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Mono;
 
+/**
+ * Reactive feign client for retrieving Publix store locations.
+ * @author Greg Meyer
+ *
+ */
 @ReactiveFeignClient(name = "publix-client", url = "${jvwatch.clinics.publix.service.url:}")
 public interface PublixClient 
 {

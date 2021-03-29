@@ -7,6 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
+/**
+ * Reply data model for requesting Publix store information.
+ * @author Greg Meyer
+ *
+ */
 @Data
 public class PublixStoresResp 
 {

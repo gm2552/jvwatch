@@ -1,15 +1,14 @@
 package abareaso.io.jvwatch.notifications;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
@@ -26,11 +25,11 @@ public class NotificationConfiguration
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NotificationConfiguration.class);			
 	
-	@Value("${jvwatch.notifications.logger.enabled:true}")
-	protected boolean logPublisherEnabled;
-	
 	@Autowired(required=false)
 	protected Twitter twitter;
+	
+	@Autowired(required=false)
+	protected EmailPublisher emailPublisher;
 	
 	/**
 	 * Creates a twitter API instance for posting notifications to twitter.  The configuration setting
@@ -42,7 +41,7 @@ public class NotificationConfiguration
 	 */
 	@ConditionalOnProperty(name="jvwatch.notifications.twitter.enabled", havingValue="true")
 	@Bean
-	public Twitter twitter(TwitterConfigProperties props)
+	public TwitterPublisher twitterPublisher(final TwitterConfigProperties props)
 	{
 		final ConfigurationBuilder cb = new ConfigurationBuilder();
 		
@@ -53,24 +52,31 @@ public class NotificationConfiguration
 		  .setOAuthAccessTokenSecret(props.getAccessTokenSecret());
 		
 		final TwitterFactory tf = new TwitterFactory(cb.build());
-		return tf.getInstance();
+		return new TwitterPublisher(tf.getInstance());
 	}
+	
+	@ConditionalOnProperty(name="jvwatch.notifications.email.enabled", havingValue="true")
+	@Bean
+	public EmailPublisher emailPublisher(final JavaMailSender mailSender, final EmailMessageConfigProperties props)
+	{
+		return new EmailPublisher(mailSender, props);
+	}
+	
+	@ConditionalOnProperty(name="jvwatch.notifications.logger.enabled", havingValue="true")
+	@Bean
+	public LoggerPublisher loggerPublisher(final JavaMailSender mailSender, final EmailMessageConfigProperties props)
+	{
+		return new LoggerPublisher();
+	}
+		
 	
 	/**
 	 * Creates a bean that contains a list of "enabled" publishers.
 	 * @return A list of configured publisher instances that will publish vaccine appointment data. 
 	 */
 	@Bean
-	public NotificationsPublisher notificationsPublisher()
-	{
-		final List<Publisher> publishers = new ArrayList<>();
-		
-		if (twitter != null)
-			publishers.add(new TwitterPublisher(twitter));
-		
-		if (logPublisherEnabled)
-			publishers.add(new LoggerPublisher());
-		
+	public NotificationsPublisher notificationsPublisher(final List<Publisher> publishers)
+	{		
 		final StringBuilder bld = new StringBuilder("Enabled notification publishers:");
 		if (publishers.isEmpty())
 			bld.append("\n\tNONE");
