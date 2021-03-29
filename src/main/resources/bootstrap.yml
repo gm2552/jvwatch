@@ -3,10 +3,10 @@ spring:
     max-in-memory-size: 10MB
 
 jvwatch:
-  states: MO,KS
+  states: FL
   radius: 25
-  latitude: '40.0889187'
-  longitude: '-93.6339103'
+  latitude: '29.9562911'
+  longitude: '-81.9557515'
   checkTask:
     period: 120000
   clinics:
@@ -17,11 +17,17 @@ jvwatch:
         url: 'https://www.hy-vee.com/my-pharmacy/api/graphql'
     cvs:
       enabled: true
-      cities: TRENTON
+      cities: JACKSONVILLE,FLEMING ISLAND,MIDDLEBURG
       apptLink: 'https://www.cvs.com/immunizations/covid-19-vaccine'
       service:
         url: 'https://www.cvs.com/immunizations/covid-19-vaccine.vaccine-status.json?vaccineinfo'
         lockoutUrl: 'https://www.cvs.com/vaccine/intake/store/cvd-schedule?icid=coronavirus-lp-vaccine-pa-statetool'
+    publix:
+      enabled: true
+      cities: JACKSONVILLE
+      apptLink: 'https://www.publix.com/covid-vaccine'
+      service:
+        url: https://services.publix.com/api/v1/
     walmart:
       enabled: true
     wallgreens:
