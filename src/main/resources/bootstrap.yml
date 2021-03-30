@@ -1,12 +1,17 @@
 spring:
   codec:
     max-in-memory-size: 10MB
+  mail:
+    host: 
+    port: 
+    username: 
+    password: 
 
 jvwatch:
   states: FL
   radius: 25
-  latitude: '29.9562911'
-  longitude: '-81.9557515'
+  latitude: '36.170548'
+  longitude: '-83.1551293'
   checkTask:
     period: 120000
   clinics:
@@ -23,7 +28,7 @@ jvwatch:
         url: 'https://www.cvs.com/immunizations/covid-19-vaccine.vaccine-status.json?vaccineinfo'
         lockoutUrl: 'https://www.cvs.com/vaccine/intake/store/cvd-schedule?icid=coronavirus-lp-vaccine-pa-statetool'
     publix:
-      enabled: true
+      enabled: false
       cities: JACKSONVILLE
       apptLink: 'https://www.publix.com/covid-vaccine'
       service:

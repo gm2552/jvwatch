@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import abareaso.io.jvwatch.feign.PublixClient;
@@ -54,9 +55,6 @@ public class PublixClinic implements Clinic
 	public PublixClinic(ClinicSearchProperties props)
 	{
 		this.props = props;
-		
-		this.props.setLatitude(29.9562911);
-		this.props.setLongitude(-81.9557515);
 	}
 	
 	@Override
@@ -141,36 +139,37 @@ public class PublixClinic implements Clinic
 			        .header("__RequestVerificationToken", verToken)
 			        .retrieve()
 			        .bodyToMono(String.class).block();
-			
-			
-			
-			/*
-			 * Find clinics that have available appointments
-			 */
-	   		final Document doc = Jsoup.parse(htmlResp);
-			
-			final Elements listItems =  doc.select("div.listItemWrapper");
-			
-			for (Element el : listItems)
+
+			if (StringUtils.hasText(htmlResp))
 			{
-				final Element listItem = el.select("div.listItem").first();
+				/*
+				 * Find clinics that have available appointments
+				 */
+		   		final Document doc = Jsoup.parse(htmlResp);
 				
-				final Element itemSpan = listItem.select("span").get(1);
+				final Elements listItems =  doc.select("div.listItemWrapper");
 				
-				final Element pharmacyName = itemSpan.selectFirst("strong");	
-				
-				final Element smallBlock = itemSpan.selectFirst("small");
-				
-				final Elements hasAppts = smallBlock.getElementsByAttributeValue("name", "pharmacyHasAppointments");
-				
-				if (hasAppts != null && hasAppts.size() > 0)
-				{	
-					if (hasAppts.first().val().equals("true"))
-					{
-						apptClinicNames.add(pharmacyName.text());
+				for (Element el : listItems)
+				{
+					final Element listItem = el.select("div.listItem").first();
+					
+					final Element itemSpan = listItem.select("span").get(1);
+					
+					final Element pharmacyName = itemSpan.selectFirst("strong");	
+					
+					final Element smallBlock = itemSpan.selectFirst("small");
+					
+					final Elements hasAppts = smallBlock.getElementsByAttributeValue("name", "pharmacyHasAppointments");
+					
+					if (hasAppts != null && hasAppts.size() > 0)
+					{	
+						if (hasAppts.first().val().equals("true"))
+						{
+							apptClinicNames.add(pharmacyName.text());
+						}
 					}
+					
 				}
-				
 			}
 		}
 		catch (Exception e)

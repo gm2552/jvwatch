@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import twitter4j.Twitter;
@@ -31,6 +32,9 @@ public class NotificationConfiguration
 	@Autowired(required=false)
 	protected EmailPublisher emailPublisher;
 	
+	@Autowired
+	protected StringRedisTemplate redisTemplate;
+	
 	/**
 	 * Creates a twitter API instance for posting notifications to twitter.  The configuration setting
 	 * jvwatch.notifications.twitter.enabled must be set to 'true' for the twitter publisher to be used.
@@ -52,7 +56,7 @@ public class NotificationConfiguration
 		  .setOAuthAccessTokenSecret(props.getAccessTokenSecret());
 		
 		final TwitterFactory tf = new TwitterFactory(cb.build());
-		return new TwitterPublisher(tf.getInstance());
+		return new TwitterPublisher(tf.getInstance(), redisTemplate);
 	}
 	
 	@ConditionalOnProperty(name="jvwatch.notifications.email.enabled", havingValue="true")

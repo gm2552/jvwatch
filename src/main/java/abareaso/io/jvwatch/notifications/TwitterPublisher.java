@@ -2,8 +2,12 @@ package abareaso.io.jvwatch.notifications;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.util.StringUtils;
 
 import abareaso.io.jvwatch.model.ClinicData;
+import twitter4j.Status;
+import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 
 /**
@@ -18,17 +22,22 @@ public class TwitterPublisher extends AbstractPublisher
 	
 	protected final Twitter twitter;
 	
-	public TwitterPublisher(Twitter twitter)
+	protected final StringRedisTemplate redisTemplate;
+	
+	public TwitterPublisher(Twitter twitter, StringRedisTemplate redisTemplate)
 	{
 		this.twitter = twitter;
+		this.redisTemplate = redisTemplate;
 	}
 
 	@Override
 	public void publishAvailableNotification(ClinicData data) 
 	{
 		try
-		{
-			twitter.updateStatus(buildAvailableMessage(data));
+		{	
+			final Status status = twitter.updateStatus(buildAvailableMessage(data));
+			
+			redisTemplate.opsForValue().set("tweet-" + data.getId(), Long.toString(status.getId()));
 		}
 		catch (Exception e)
 		{
@@ -41,7 +50,30 @@ public class TwitterPublisher extends AbstractPublisher
 	{
 		try
 		{
-			twitter.updateStatus(buildUnavailableMessage(data));
+			long tweetId = -1;
+			
+			final String tweetIdStr = redisTemplate.opsForValue().get("tweet-" + data.getId());
+
+			if (StringUtils.hasText(tweetIdStr))
+			{
+				tweetId = Long.parseLong(tweetIdStr);
+			}
+			
+			if (tweetId == -1)
+				twitter.updateStatus(buildUnavailableMessage(data));
+			else 
+			{
+				
+				
+			    final StatusUpdate statusUpdate = new StatusUpdate(buildUnavailableMessage(data));
+			    statusUpdate.inReplyToStatusId(tweetId);
+			    
+			    twitter.updateStatus(buildUnavailableMessage(data));
+			    
+			    redisTemplate.opsForValue().getOperations().delete("tweet-" + data.getId());
+			}
+			
+			
 		}
 		catch (Exception e)
 		{
