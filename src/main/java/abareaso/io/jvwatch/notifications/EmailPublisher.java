@@ -13,6 +13,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 
 import abareaso.io.jvwatch.model.ClinicData;
 
+/**
+ * A publisher that sends clinic notification messages to a configured set of email addresses
+ * from a configured email sender account.  Email server information is configured using the standard
+ * spring.mail.* spring configuration parameters, and the sender, to, and subject information is supplied
+ * with jvwatch.notifications.email settings enumerated in the EmailMessageConfigProperties class.
+ * @author Greg Meyer
+ */
 public class EmailPublisher extends AbstractPublisher
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EmailPublisher.class);		

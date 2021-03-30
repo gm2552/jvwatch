@@ -68,7 +68,7 @@ public class NotificationConfiguration
 	
 	@ConditionalOnProperty(name="jvwatch.notifications.logger.enabled", havingValue="true")
 	@Bean
-	public LoggerPublisher loggerPublisher(final JavaMailSender mailSender, final EmailMessageConfigProperties props)
+	public LoggerPublisher loggerPublisher()
 	{
 		return new LoggerPublisher();
 	}

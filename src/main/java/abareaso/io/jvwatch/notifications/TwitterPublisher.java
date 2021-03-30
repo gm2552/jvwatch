@@ -68,7 +68,7 @@ public class TwitterPublisher extends AbstractPublisher
 			    final StatusUpdate statusUpdate = new StatusUpdate(buildUnavailableMessage(data));
 			    statusUpdate.inReplyToStatusId(tweetId);
 			    
-			    twitter.updateStatus(buildUnavailableMessage(data));
+			    twitter.updateStatus(statusUpdate);
 			    
 			    redisTemplate.opsForValue().getOperations().delete("tweet-" + data.getId());
 			}

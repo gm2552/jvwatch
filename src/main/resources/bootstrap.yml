@@ -1,11 +1,6 @@
 spring:
   codec:
     max-in-memory-size: 10MB
-  mail:
-    host: 
-    port: 
-    username: 
-    password: 
 
 jvwatch:
   states: FL
