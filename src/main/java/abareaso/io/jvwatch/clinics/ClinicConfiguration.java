@@ -53,6 +53,9 @@ public class ClinicConfiguration
 
 	@Value("${jvwatch.clinics.samsclub.enabled:true}")
 	protected boolean enableSams;	
+
+	@Value("${jvwatch.clinics.winndixie.enabled:true}")
+	protected boolean enableWinnDixie;	
 	
 	@Autowired
 	protected CVSClinic cvsClinic;
@@ -80,6 +83,9 @@ public class ClinicConfiguration
 	
 	@Autowired
 	protected SamsClubClinic samsClinic;	
+
+	@Autowired
+	protected WinnDixieClinic winnDixieClinic;
 	
 	/**
 	 * Creates a bean that contains a list of "enabled" clinics.
@@ -116,6 +122,9 @@ public class ClinicConfiguration
 
 		if (enableSams)
 			clinics.add(samsClinic);
+		
+		if (enableWinnDixie)
+			clinics.add(winnDixieClinic);
 		
 		final StringBuilder bld = new StringBuilder("Enabled clinic searchs:");
 		if (clinics.isEmpty())

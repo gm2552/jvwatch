@@ -21,7 +21,7 @@ jvwatch:
       apptLink: 'https://www.cvs.com/immunizations/covid-19-vaccine'
       service:
         url: 'https://www.cvs.com/immunizations/covid-19-vaccine.vaccine-status.json?vaccineinfo'
-        lockoutUrl: 'https://www.cvs.com/vaccine/intake/store/cvd-schedule?icid=coronavirus-lp-vaccine-pa-statetool'
+        lockoutUrl: 'https://www.cvs.com/vaccine/intake/store/cvd-schedule?icid=coronavirus-lp-vaccine-pa-statetool'      
     publix:
       enabled: false
       cities: JACKSONVILLE
@@ -39,6 +39,8 @@ jvwatch:
     safeway:
       enabled: true
     samsclub:
+      enabled: true
+    winndixie:
       enabled: true
     vaccine-spotter:
       service:

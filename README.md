@@ -30,7 +30,6 @@ You will want to create an application.yml file to same directory where you copi
 
 The following is an example application.yml file that enables reading from 2 states in a particular location
 and, disables reading appointment from HyVee, and posts appointment to twitter:
-
 ```
 jvwatch:
   states: MO,IL
@@ -39,7 +38,7 @@ jvwatch:
   longitude: '-90.3430342'
   clinics:
     cvs:
-      cities: SAINT LOUIS,ST. LOUIS,BALLWIN,BELLEVILLE
+      cities: SAINT LOUIS,ST. LOUIS,BALLWIN,BELLEVILLE  
     hyvee:
       enabled: false
   notifications:
@@ -72,15 +71,27 @@ in the application.yml file.
 
 By default, all clinics are enabled, but can be disabled by setting the appropriate `enabled` property to false.
 
+- Albertsons
+  - `jvwatch.clinics.alertsons.enabled` 
 - CVS: 
-  - `jvwatch.clinics.cvs.enabled`
+  - `jvwatch.clinics.cvs.enabled` 
   - `jvwatch.clinics.cvs.cities` Comma delimited list of cities (in all caps) that will be included in the appointment list.  
+
 - HyVee:
   - `jvwatch.clinics.hyvee.enabled`
-- Walmart:
-  - `jvwatch.clinics.walmart.enabled`
+- Safeway
+  - `jvwatch.clinics.safeway.enabled`  
+- Sam's Club
+  - `jvwatch.clinics.samsclub.enabled`   
+- Vons
+  - `jvwatch.clinics.vons.enabled`
 - Wallgreens:
   - `jvwatch.clinics.wallgreens.enabled`
+- Walmart:
+  - `jvwatch.clinics.walmart.enabled` 
+- Winn Dixie
+  - `jvwatch.clinics.winndixie.enabled`     
+
   
 ### Redis and RabbitMQ
 
