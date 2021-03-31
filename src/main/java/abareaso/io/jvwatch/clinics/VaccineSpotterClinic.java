@@ -9,13 +9,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 import abareaso.io.jvwatch.feign.VaccineSpotterClient;
 import abareaso.io.jvwatch.model.ClinicData;
 import abareaso.io.jvwatch.model.VaccineSpotterResp;
+import abareaso.io.jvwatch.model.VaccineSpotterResp.VaccineSpotterFeature;
 
 /**
  * An abstract base class that uses the VaccineSpotter API which has the ability retrieve appointment data
@@ -148,7 +152,23 @@ public abstract class VaccineSpotterClinic implements Clinic
 	 * @return Returns true if the clinic brand matches the desired brand and if the clinic location is within the desired location radius.
 	 * Return false other wise.
 	 */
-	protected abstract boolean shouldIncludeLocation(VaccineSpotterResp.VaccineSpotterFeature feature);
+	protected boolean shouldIncludeLocation(VaccineSpotterFeature feature) 
+	{
+		boolean retVal = false;
+		
+		if (feature.getProperties().getProvider_brand().equals(getBrandName()))
+		{
+			double locLat = feature.getGeometry().getCoordinates().get(1);
+			double locLong = feature.getGeometry().getCoordinates().get(0);
+			
+			double distance = distance(props.getLatitude(), props.getLongitude(), locLat, locLong);
+			
+			if (distance <= props.getRadius())
+				retVal = true;
+		}
+		
+		return retVal;
+	}
 	
 	/**
 	 * Builds a ClinicData structure from the provided clinic.
@@ -159,5 +179,74 @@ public abstract class VaccineSpotterClinic implements Clinic
 	 * @param available Indicates if vaccine appointments are available at the clinic.
 	 * @return
 	 */
-	protected abstract ClinicData buildClinicData(VaccineSpotterResp.VaccineSpotterFeature feature, List<Date> dates, boolean available);
+	protected ClinicData buildClinicData(VaccineSpotterResp.VaccineSpotterFeature feature, List<Date> dates, boolean available)
+	{
+		final ClinicData data = new ClinicData();
+		
+		final StringBuilder id = new StringBuilder(props.getCachePrefix()).append(getBrandName()).append("-").append(feature.getProperties().getId());
+		
+		data.setLink(feature.getProperties().getUrl());
+		data.setId(id.toString());
+		data.setName(getDisplayName() + " " + feature.getProperties().getCity());
+		data.setState(feature.getProperties().getState());
+		data.setZipCode(feature.getProperties().getPostal_code());
+		
+		if (dates.size() > 0)
+		{
+			data.setEariestApptDay(dates.get(0));
+			
+			if (dates.size() > 1)
+				data.setLatestApptDay(dates.get(1));
+		}		
+		
+		if (StringUtils.hasText(feature.getProperties().getAppointments_last_fetched()))
+		{
+			Date dt = null;
+			try
+			{
+				DateTimeFormatter parser = ISODateTimeFormat.dateTime();
+				dt = parser.parseDateTime(feature.getProperties().getAppointments_last_fetched()).toDate();
+				
+			}
+			catch (Exception e)
+			{
+
+			}
+			
+			if (dt == null)
+			{
+				try
+				{
+					DateTimeFormatter parser = ISODateTimeFormat.dateTimeNoMillis();
+					dt = parser.parseDateTime(feature.getProperties().getAppointments_last_fetched()).toDate();
+					
+				}
+				catch (Exception e)
+				{
+					LOGGER.error("Error parsing {} date data : {}", getDisplayName(), e.getMessage(), e);
+				}				
+			}
+			
+			if (dt != null)
+			{
+				data.setLastFetched(dt);
+			}
+		}
+		
+		data.setAvailable(available);
+		
+		return data;
+	}	
+	
+	/**
+	 * The brand name of the clinic that determines if the clinic should be included in the result set.
+	 * @return The brand name of the clinic that determines if the clinic should be included in the result set.
+	 */
+	protected abstract String getBrandName();
+	
+	/**
+	 * The display name of the clinic to use when publishing the clinic data.
+	 * @return The isplay name of the clinic to use when publishing the clinic data.
+	 */
+	protected abstract String getDisplayName();
 }

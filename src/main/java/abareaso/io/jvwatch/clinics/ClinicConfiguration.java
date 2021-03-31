@@ -42,6 +42,18 @@ public class ClinicConfiguration
 	@Value("${jvwatch.clinics.publix.enabled:true}")
 	protected boolean enablePublix;		
 	
+	@Value("${jvwatch.clinics.vons.enabled:true}")
+	protected boolean enableVons;		
+	
+	@Value("${jvwatch.clinics.albertsons.enabled:true}")
+	protected boolean enableAlbertsons;	
+	
+	@Value("${jvwatch.clinics.safeway.enabled:true}")
+	protected boolean enableSafeway;		
+
+	@Value("${jvwatch.clinics.samsclub.enabled:true}")
+	protected boolean enableSams;	
+	
 	@Autowired
 	protected CVSClinic cvsClinic;
 	
@@ -56,6 +68,18 @@ public class ClinicConfiguration
 	
 	@Autowired
 	protected PublixClinic publixClinic;
+	
+	@Autowired
+	protected VonsClinic vonsClinic;	
+	
+	@Autowired
+	protected AlbertsonsClinic albertsonsClinic;	
+	
+	@Autowired
+	protected SafewayClinic safewayClinic;
+	
+	@Autowired
+	protected SamsClubClinic samsClinic;	
 	
 	/**
 	 * Creates a bean that contains a list of "enabled" clinics.
@@ -80,6 +104,18 @@ public class ClinicConfiguration
 		
 		if (enablePublix)
 			clinics.add(publixClinic);
+		
+		if (enableVons)
+			clinics.add(vonsClinic);	
+
+		if (enableAlbertsons)
+			clinics.add(albertsonsClinic);
+
+		if (enableSafeway)
+			clinics.add(safewayClinic);
+
+		if (enableSams)
+			clinics.add(samsClinic);
 		
 		final StringBuilder bld = new StringBuilder("Enabled clinic searchs:");
 		if (clinics.isEmpty())

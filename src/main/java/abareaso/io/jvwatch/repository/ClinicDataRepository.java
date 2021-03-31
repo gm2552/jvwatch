@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import abareaso.io.jvwatch.model.ClinicData;
 
 /**
- * A spring data repository used to store the state information of a clinic published data.
+ * A spring data repository used to store the state information of a clinic's published data.
  * @author Greg Meyer
  *
  */

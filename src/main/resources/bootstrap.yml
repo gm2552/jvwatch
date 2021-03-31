@@ -3,10 +3,10 @@ spring:
     max-in-memory-size: 10MB
 
 jvwatch:
-  states: FL
+  states: NV
   radius: 25
-  latitude: '36.170548'
-  longitude: '-83.1551293'
+  latitude: '36.1246738'
+  longitude: '-115.4551869'
   checkTask:
     period: 120000
   clinics:
@@ -17,7 +17,7 @@ jvwatch:
         url: 'https://www.hy-vee.com/my-pharmacy/api/graphql'
     cvs:
       enabled: true
-      cities: JACKSONVILLE,FLEMING ISLAND,MIDDLEBURG
+      cities: LAS VEGAS,HENDERSON,NORTH LAS VEGAS
       apptLink: 'https://www.cvs.com/immunizations/covid-19-vaccine'
       service:
         url: 'https://www.cvs.com/immunizations/covid-19-vaccine.vaccine-status.json?vaccineinfo'
@@ -31,6 +31,14 @@ jvwatch:
     walmart:
       enabled: true
     wallgreens:
+      enabled: true
+    vons:
+      enabled: true
+    alertsons:
+      enabled: true
+    safeway:
+      enabled: true
+    samsclub:
       enabled: true
     vaccine-spotter:
       service:
