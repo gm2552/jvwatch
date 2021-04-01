@@ -69,6 +69,10 @@ in the application.yml file.
 
 ### Optional Clinic Configuration
 
+By default, notification times are displayed with the local system time zone.  The following setting changes the timezone
+of the notification time display:
+* `jvwatch.notifTimeZone`: Use a predefined Java time zone string such as America/Los_Angeles or America/Chicago.
+
 By default, all clinics are enabled, but can be disabled by setting the appropriate `enabled` property to false.
 
 - Albertsons

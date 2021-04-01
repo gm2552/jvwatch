@@ -7,6 +7,7 @@ jvwatch:
   radius: 25
   latitude: '36.1246738'
   longitude: '-115.4551869'
+  notifTimeZone: 
   checkTask:
     period: 120000
   clinics:

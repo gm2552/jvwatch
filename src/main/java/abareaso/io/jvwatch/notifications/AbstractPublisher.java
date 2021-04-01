@@ -3,6 +3,7 @@ package abareaso.io.jvwatch.notifications;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.springframework.util.StringUtils;
 
@@ -15,7 +16,7 @@ import abareaso.io.jvwatch.model.ClinicData;
  *
  */
 public abstract class AbstractPublisher implements Publisher
-{
+{	
 	protected String buildAvailableMessage(ClinicData data)
 	{
 		final SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
@@ -46,7 +47,8 @@ public abstract class AbstractPublisher implements Publisher
 		if (data.getLastFetched() == null)
 			data.setLastFetched(new Date());
 
-		final DateFormat dateFormat = new SimpleDateFormat("hh:mm aa");
+		final DateFormat dateFormat = new SimpleDateFormat("hh:mm aa zzz");
+		applyFormatTZ(dateFormat);
 		
 		builder.append(" (as of ").append(dateFormat.format(data.getLastFetched())).append(")");
 		
@@ -61,10 +63,19 @@ public abstract class AbstractPublisher implements Publisher
 		if (data.getLastFetched() == null)
 			data.setLastFetched(new Date());
 
-		final DateFormat dateFormat = new SimpleDateFormat("hh:mm aa");
+		final DateFormat dateFormat = new SimpleDateFormat("hh:mm aa zzz");
+		applyFormatTZ(dateFormat);
 		
 		builder.append(" (as of ").append(dateFormat.format(data.getLastFetched())).append(")");
 		
 		return builder.toString();
+	}
+	
+	protected void applyFormatTZ(DateFormat dateFormat)
+	{
+		final String notifTimeZone = System.getProperty("jvwatch.notifTimeZone");
+		
+		if (StringUtils.hasText(notifTimeZone))
+			dateFormat.setTimeZone(TimeZone.getTimeZone(notifTimeZone));
 	}
 }

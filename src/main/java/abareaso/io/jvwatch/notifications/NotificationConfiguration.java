@@ -5,11 +5,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.util.StringUtils;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
@@ -34,6 +36,9 @@ public class NotificationConfiguration
 	
 	@Autowired
 	protected StringRedisTemplate redisTemplate;
+	
+	@Value("${jvwatch.notifTimeZone:}")
+	protected String notifTimeZone;
 	
 	/**
 	 * Creates a twitter API instance for posting notifications to twitter.  The configuration setting
@@ -81,6 +86,12 @@ public class NotificationConfiguration
 	@Bean
 	public NotificationsPublisher notificationsPublisher(final List<Publisher> publishers)
 	{		
+		if (StringUtils.hasText(notifTimeZone))
+		{
+			// Set a system property
+			System.setProperty("jvwatch.notifTimeZone", notifTimeZone);
+		}
+		
 		final StringBuilder bld = new StringBuilder("Enabled notification publishers:");
 		if (publishers.isEmpty())
 			bld.append("\n\tNONE");
