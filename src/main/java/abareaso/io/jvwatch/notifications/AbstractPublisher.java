@@ -39,7 +39,7 @@ public abstract class AbstractPublisher implements Publisher
 		
 		final String zipCode = StringUtils.hasText(data.getZipCode()) ?  ", zip code " + data.getZipCode() : "";
 		
-		builder.append(": Vaccince appointments available at ").append(data.getName());
+		builder.append(": Vaccine appointments available at ").append(data.getName());
 		builder.append(dayString.toString());
 		builder.append(".  Sign up here").append(zipCode).append(":\n");
 		builder.append(link);
