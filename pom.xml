@@ -11,8 +11,8 @@
 	<groupId>abareasol.io</groupId>
 	<artifactId>jvwatch</artifactId>
 	<version>${revision}</version>
-	<name>timplus-feign-client</name>
-	<description>TIM+ feign client library for internal services</description>
+	<name>jvwatch</name>
+	<description>Java basec vaccine watcher application</description>
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>2020.0.2</spring-cloud.version>
