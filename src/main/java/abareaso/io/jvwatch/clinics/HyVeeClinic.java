@@ -10,8 +10,6 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -23,6 +21,7 @@ import abareaso.io.jvwatch.model.ClinicData;
 import abareaso.io.jvwatch.model.HyVeeApptRequest;
 import abareaso.io.jvwatch.model.HyVeeManufacturerIdRequest;
 import abareaso.io.jvwatch.model.HyVeeTimeSlotRequest;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 /**
@@ -32,10 +31,9 @@ import reactor.core.publisher.Mono;
  * @author Greg Meyer
  */
 @Service
+@Slf4j
 public class HyVeeClinic implements Clinic
 {	
-	private static final Logger LOGGER = LoggerFactory.getLogger(HyVeeClinic.class);	
-	
 	protected ClinicSearchProperties props;
 	
 	@Value("${jvwatch.clinics.hyvee.apptLink}")
@@ -97,7 +95,7 @@ public class HyVeeClinic implements Clinic
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Error retrieving clinic data from HyVee : {}", e.getMessage(), e);
+			log.error("Error retrieving clinic data from HyVee : {}", e.getMessage(), e);
 		}
 		return retVal;
 	}
@@ -141,7 +139,7 @@ public class HyVeeClinic implements Clinic
 			} 
 			catch (ParseException e) 
 			{
-				LOGGER.error("Error parsing HyVee date data : {}", e.getMessage(), e);
+				log.error("Error parsing HyVee date data : {}", e.getMessage(), e);
 			}
 		
 		}
@@ -186,7 +184,7 @@ public class HyVeeClinic implements Clinic
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Error retrieving HyVee manufacturer data : {}", e.getMessage(), e);
+			log.error("Error retrieving HyVee manufacturer data : {}", e.getMessage(), e);
 		}
 		
 		return retVal;
@@ -228,7 +226,7 @@ public class HyVeeClinic implements Clinic
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Error retrieving HyVee appointment data : {}", e.getMessage(), e);
+			log.error("Error retrieving HyVee appointment data : {}", e.getMessage(), e);
 		}
 		
 		return retVal;

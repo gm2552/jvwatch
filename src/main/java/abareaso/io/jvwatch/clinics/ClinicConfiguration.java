@@ -3,12 +3,12 @@ package abareaso.io.jvwatch.clinics;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Configuration class for creating instances of the clinics that will be polled for vaccine
@@ -17,10 +17,9 @@ import org.springframework.context.annotation.Configuration;
  *
  */
 @Configuration
+@Slf4j
 public class ClinicConfiguration 
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(ClinicConfiguration.class);		
-	
+{	
 	@Value("${jvwatch.clinics.balls.enabled:true}")
 	protected boolean enableBalls;
 	
@@ -137,7 +136,7 @@ public class ClinicConfiguration
 			}
 		}
 		
-		LOGGER.info(bld.toString());
+		log.info(bld.toString());
 		
 		return clinics;
 	}

@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +18,7 @@ import abareaso.io.jvwatch.feign.VaccineSpotterClient;
 import abareaso.io.jvwatch.model.ClinicData;
 import abareaso.io.jvwatch.model.VaccineSpotterResp;
 import abareaso.io.jvwatch.model.VaccineSpotterResp.VaccineSpotterFeature;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * An abstract base class that uses the VaccineSpotter API which has the ability retrieve appointment data
@@ -29,10 +28,9 @@ import abareaso.io.jvwatch.model.VaccineSpotterResp.VaccineSpotterFeature;
  * are queried for appointment data.
  * @author Greg Meyer
  */
+@Slf4j
 public abstract class VaccineSpotterClinic implements Clinic
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(HyVeeClinic.class);		
-	
 	protected ClinicSearchProperties props;
 	
 	@Autowired
@@ -74,7 +72,7 @@ public abstract class VaccineSpotterClinic implements Clinic
 			}
 			catch (Exception e)
 			{
-				LOGGER.error("Error retrieving Vaccine spotter data : {}", e.getMessage(), e);
+				log.error("Error retrieving Vaccine spotter data : {}", e.getMessage(), e);
 			}
 		}
 		
@@ -95,12 +93,15 @@ public abstract class VaccineSpotterClinic implements Clinic
 		{
 			try 
 			{
-				final Date dt = simpleDateFormat.parse(appt.getTime().substring(0, 10));
-				times.add(dt.getTime());
+				if (StringUtils.hasText(appt.getTime()))
+				{		
+					final Date dt = simpleDateFormat.parse(appt.getTime().substring(0, 10));
+					times.add(dt.getTime());
+				}
 			} 
 			catch (ParseException e) 
 			{
-				LOGGER.error("Error parsing Vaccine spotter date data : {}", e.getMessage(), e);
+				log.error("Error parsing Vaccine spotter date data : {}", e.getMessage(), e);
 			}
 		}
 		
@@ -223,7 +224,7 @@ public abstract class VaccineSpotterClinic implements Clinic
 				}
 				catch (Exception e)
 				{
-					LOGGER.error("Error parsing {} date data : {}", getDisplayName(), e.getMessage(), e);
+					log.error("Error parsing {} date data : {}", getDisplayName(), e.getMessage(), e);
 				}				
 			}
 			

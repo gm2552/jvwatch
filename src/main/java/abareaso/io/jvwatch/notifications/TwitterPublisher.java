@@ -1,11 +1,10 @@
 package abareaso.io.jvwatch.notifications;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.StringUtils;
 
 import abareaso.io.jvwatch.model.ClinicData;
+import lombok.extern.slf4j.Slf4j;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
@@ -16,10 +15,9 @@ import twitter4j.Twitter;
  * @author Greg Meyer
  *
  */
+@Slf4j
 public class TwitterPublisher extends AbstractPublisher
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(TwitterPublisher.class);		
-	
 	protected final Twitter twitter;
 	
 	protected final StringRedisTemplate redisTemplate;
@@ -41,7 +39,7 @@ public class TwitterPublisher extends AbstractPublisher
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Failed to publish tweet for available data.", e);
+			log.error("Failed to publish tweet for available data.", e);
 		}
 	}
 	
@@ -77,7 +75,7 @@ public class TwitterPublisher extends AbstractPublisher
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Failed to publish tweet for unavailable data.", e);
+			log.error("Failed to publish tweet for unavailable data.", e);
 		}
 	}
 	

@@ -9,8 +9,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +19,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import abareaso.io.jvwatch.feign.PublixClient;
 import abareaso.io.jvwatch.model.ClinicData;
 import abareaso.io.jvwatch.model.PublixStoresResp;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Retrieves vaccine appointment data from Publix clinics.  This implementation uses the global 
@@ -33,10 +32,9 @@ import abareaso.io.jvwatch.model.PublixStoresResp;
  *
  */
 @Service
+@Slf4j
 public class PublixClinic implements Clinic
-{
-	private static final Logger LOGGER = LoggerFactory.getLogger(PublixClinic.class);	
-	
+{	
 	@Value("${jvwatch.clinics.publix.apptLink}")
 	protected String apptLink;	
 	
@@ -79,7 +77,7 @@ public class PublixClinic implements Clinic
 				}
 				catch (Exception e)
 				{
-					LOGGER.warn("Error getting publix store in {city}, {state}: ", e.getMessage(), e);
+					log.warn("Error getting publix store in {city}, {state}: ", e.getMessage(), e);
 				}
 			}
 		}
@@ -174,7 +172,7 @@ public class PublixClinic implements Clinic
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Error getting list of publix apointment clinics: {}", e.getMessage(), e);
+			log.error("Error getting list of publix apointment clinics: {}", e.getMessage(), e);
 		}
 		
 		return apptClinicNames;

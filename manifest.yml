@@ -1,0 +1,12 @@
+---
+applications:
+- name: jvwatch
+  instances: 1
+  buildpack: java_buildpack_offline
+  path: target/jvwatch-1.0.0-SNAPSHOT.jar
+  timeout: 60
+  env: 
+    spring.profiles.active: 
+    spring.cloud.config.label: master
+    JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{enabled: false}'  
+

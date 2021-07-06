@@ -1,10 +1,10 @@
 package abareaso.io.jvwatch.notifications;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * A utility class for shortening URLs.  This is generally used for the appointment link for a 
@@ -12,10 +12,9 @@ import org.springframework.web.client.RestTemplate;
  * @author Greg Meyer
  *
  */
+@Slf4j
 public class TinyURLCreator 
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(TinyURLCreator.class);	
-	
 	/**
 	 * Converts a URL to a tiny URL.
 	 * @param URL The URL to convert.
@@ -37,7 +36,7 @@ public class TinyURLCreator
 		}
 		catch (Exception e)
 		{
-			LOGGER.warn("Failed to create tiny URL for url {}.  Will fall back to long URL.", URL);
+			log.warn("Failed to create tiny URL for url {}.  Will fall back to long URL.", URL);
 		}
 		
 		return "";

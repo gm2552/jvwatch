@@ -7,11 +7,10 @@ import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import abareaso.io.jvwatch.model.ClinicData;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * A publisher that sends clinic notification messages to a configured set of email addresses
@@ -20,10 +19,9 @@ import abareaso.io.jvwatch.model.ClinicData;
  * with jvwatch.notifications.email settings enumerated in the EmailMessageConfigProperties class.
  * @author Greg Meyer
  */
+@Slf4j
 public class EmailPublisher extends AbstractPublisher
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(EmailPublisher.class);		
-	
 	protected final JavaMailSender emailSender;
 	
 	protected final String from;
@@ -61,7 +59,7 @@ public class EmailPublisher extends AbstractPublisher
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Failed to publish email for unavailable data.", e);
+			log.error("Failed to publish email for unavailable data.", e);
 		}
 	}
 
@@ -83,7 +81,7 @@ public class EmailPublisher extends AbstractPublisher
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Failed to publish email for unavailable data.", e);
+			log.error("Failed to publish email for unavailable data.", e);
 		}	
 	}
 
