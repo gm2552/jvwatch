@@ -1,4 +1,41 @@
-spring:  
+---
+spring:
+  profiles: supplier
+  
+  cloud: 
+    stream:
+      poller:
+        fixed-delay: ${jvwatch.checkTask.period} 
+      function:
+        definition: vaccineClinicDataSupplier
+      bindings: 
+        vaccineClinicDataSupplier-out-0: 
+          destination: jvwatch-clinic-data
+
+---
+spring:
+  profiles: consumer
+
+  cloud: 
+    stream:
+      function:
+        definition: vaccineClinicDataSink
+      bindings: 
+        vaccineClinicDataSink-in-0: 
+          destination: jvwatch-clinic-data
+          group: jvwatch-clinic-data-sink-group
+          consumer:
+            concurrency: 1    
+            maxAttempts: 4
+            backOffInitialInterval: 15000
+            backOffMaxInterval: 60000 
+            
+---
+#Special profile if the application will play both a consumer and supplier role.  
+#This is needed to map the stream function definition to multiple beans
+spring:
+  profiles: dual
+    
   cloud: 
     stream:
       poller:

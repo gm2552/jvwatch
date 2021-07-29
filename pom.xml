@@ -71,7 +71,11 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-stream-binder-rabbit</artifactId>
-		</dependency>					
+		</dependency>	
+	    <dependency>
+	      <groupId>io.pivotal.spring.cloud</groupId>
+	      <artifactId>spring-cloud-services-starter-config-client</artifactId>      
+	    </dependency>						
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -159,7 +163,7 @@
 	        <dependency>
 	            <groupId>io.pivotal.spring.cloud</groupId>
 	            <artifactId>spring-cloud-services-dependencies</artifactId>
-	            <version>3.1.5.RELEASE</version>
+	            <version>3.2.1.RELEASE</version>
 	            <type>pom</type>
 	            <scope>import</scope>
 	        </dependency>			        		

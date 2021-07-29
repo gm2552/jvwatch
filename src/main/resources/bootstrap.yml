@@ -2,6 +2,11 @@ spring:
   codec:
     max-in-memory-size: 10MB
 
+#Use the "dual" profile if the application is to be 
+#run as both a consumer and supplier
+  profiles:
+    active: supplier,consumer,dual
+    
 jvwatch:
   states: NV
   radius: 25

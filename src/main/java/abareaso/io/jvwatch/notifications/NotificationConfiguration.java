@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.util.StringUtils;
@@ -23,6 +24,7 @@ import twitter4j.conf.ConfigurationBuilder;
  */
 @Configuration
 @Slf4j
+@Profile("consumer")
 public class NotificationConfiguration 
 {	
 	@Autowired
@@ -49,7 +51,8 @@ public class NotificationConfiguration
 	
 	@ConditionalOnProperty(name="jvwatch.notifications.email.enabled", havingValue="true")
 	@Bean
-	public EmailPublisher emailPublisher(final JavaMailSender mailSender, final EmailMessageConfigProperties props)
+	public EmailPublisher emailPublisher(final JavaMailSender mailSender, 
+			final EmailMessageConfigProperties props)
 	{
 		return new EmailPublisher(mailSender, props);
 	}

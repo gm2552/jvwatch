@@ -168,7 +168,8 @@ public class HyVeeClinic implements Clinic
 			        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 			        .body(Mono.just(req), HyVeeManufacturerIdRequest.class)
 			        .retrieve()
-			        .bodyToMono(String.class).block();			
+			        .bodyToMono(String.class)
+			        .block();			
 			
 			final JSONArray availObjects = new JSONObject(jsonResp).getJSONObject("data").getJSONArray("getCovidVaccineLocationAvailability");
 			

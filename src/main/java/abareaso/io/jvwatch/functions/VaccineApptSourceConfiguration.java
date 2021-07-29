@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.function.context.PollableBean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import abareaso.io.jvwatch.clinics.Clinic;
 import abareaso.io.jvwatch.model.ClinicData;
@@ -23,6 +24,7 @@ import reactor.core.publisher.Flux;
  *
  */
 @Configuration
+@Profile("supplier")
 public class VaccineApptSourceConfiguration 
 {	
 	/**
