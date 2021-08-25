@@ -12,10 +12,11 @@ import reactivefeign.spring.config.EnableReactiveFeignClients;
 @EnableReactiveFeignClients
 @EnableRedisRepositories
 @EnableConfigurationProperties
-public class JVWatachApplication
+public class JVWatchApplication
 {
 	public static void main(String[] args) 
 	{		
-        SpringApplication.run(JVWatachApplication.class);
+        SpringApplication.run(JVWatchApplication.class);
 	}
 }
+
