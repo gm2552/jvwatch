@@ -1,0 +1,13 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: jvwatch
+  labels:
+    apps.tanzu.vmware.com/workload-type: web
+    app.kubernetes.io/part-of: jvwatch
+spec:
+  source:
+    git:
+      url: https://github.com/gm2552/jvwatch.git
+      ref:
+        branch: main
